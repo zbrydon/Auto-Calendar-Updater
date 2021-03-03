@@ -3,7 +3,7 @@ I created this application in order to automatically update my Google Calendar w
 
 There are two parts;  
 A python app to access, download, extract and format the shift data.  
-A Node.js/Express.js web app that schedules a cron job, the job runs the python script and then takes the data provided and updates my Google Calendar via the Google Calendar API.
+A Node.js app that runs the python script and then takes the data provided and updates my Google Calendar via the Google Calendar API.
 
 It performs the following:
 1)  Logs into Woolworths employee portal
