@@ -56,8 +56,6 @@ def get_rosters(file_zero_path, file_one_path, file_two_path):
     params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': 'C:\\Users\\zacbr\\Documents\\20-21 Projects\\MicroServices\\Auto-Calendar-Updater\\rosters'}}
     driver.execute("send_command", params)
 
-    driver.get_screenshot_as_file('test1.png')
-
     driver.get("https://wowpeople.woolworths.com.au/content/dam/wowPeoplePortal/Rosters/wow_eroster/3108_week_0.pdf")
     driver.get("https://wowpeople.woolworths.com.au/content/dam/wowPeoplePortal/Rosters/wow_eroster/3108_week_1.pdf")
     driver.get("https://wowpeople.woolworths.com.au/content/dam/wowPeoplePortal/Rosters/wow_eroster/3108_week_2.pdf")

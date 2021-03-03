@@ -4,9 +4,6 @@ const { spawnSync } = require('child_process');
 const { OAuth2 } = google.auth;
 require('dotenv').config()
 
-
-
-
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const refreshToken = process.env.REFRESH_TOKEN;
@@ -56,7 +53,6 @@ function getShifts() {
         calendarId: calendarId,
         timeMin: dateTime
     });
-    console.log(result);
     return result;
 }
 
@@ -95,6 +91,7 @@ async function deleteAndAddShifts() {
         sleep(10000);
         console.log(j + "   :   created");
     }
+    console.log('Done');
 }
 
 runScript();
