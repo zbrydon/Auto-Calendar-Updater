@@ -1,16 +1,11 @@
-const express = require('express');
-const cron = require('node-cron');
 const { google } = require('googleapis');
 const newShifts = require('./newShifts.json');
-const { spawn, spawnSync } = require('child_process');
+const { spawnSync } = require('child_process');
 const { OAuth2 } = google.auth;
-const app = express();
-const port = process.env.PORT || 3003;
-//0 0 0 * *
-cron.schedule('*/2 * * * *', function () {
-    await runScript();
-    deleteAndAddShifts();
-})
+require('dotenv').config()
+
+
+
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -35,13 +30,13 @@ function runScript() {
     return py;
 }
 
-function convertGDateTime(date, time) {
+function convertDateTime(date, time) {
     let offset = new Date().getTimezoneOffset() / -60;
     let dateTime = date + 'T' + time + ':00+' + offset + ':00';
     return dateTime;
 }
 
-function getGTime() {
+function getTime() {
     let today = new Date();
     let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -55,17 +50,18 @@ function sleep(ms) {
 }
 
 function getShifts() {
-    let dateTime = getGTime();
+    let dateTime = getTime();
+    console.log(calendarId);
     result = calendar.events.list({
         calendarId: calendarId,
         timeMin: dateTime
     });
+    console.log(result);
     return result;
 }
 
 async function deleteAndAddShifts() {
     let shifts = await getShifts().catch(e => { console.log(e) });
-    console.log(shifts.data.items.length);
     for (let i = 0; i < shifts.data.items.length; i++) {
         await calendar.events.delete({
             calendarId: calendarId,
@@ -76,8 +72,8 @@ async function deleteAndAddShifts() {
     }
     console.log(newShifts.length);
     for (let j = 0; j < newShifts.length; j++) {
-        let newStart = convertGDateTime(newShifts[j].date, newShifts[j].startTime);
-        let newEnd = convertGDateTime(newShifts[j].date, newShifts[j].endTime);
+        let newStart = convertDateTime(newShifts[j].date, newShifts[j].startTime);
+        let newEnd = convertDateTime(newShifts[j].date, newShifts[j].endTime);
         let event = {
             summary: 'Work - Break: ' + newShifts[j].break,
             location: '127 Boronia Rd, Boronia VIC 3155',
@@ -101,4 +97,5 @@ async function deleteAndAddShifts() {
     }
 }
 
-app.listen(port);
+runScript();
+deleteAndAddShifts();
